@@ -17,13 +17,13 @@ html,body{height:100%}
 body{font-family:"PingFang SC","Microsoft YaHei","Heiti SC",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   color:var(--ink);background:var(--bg);overflow:hidden;display:grid;grid-template-rows:64px 1fr}
 /* ---------- 顶栏 ---------- */
-.top{display:flex;align-items:center;gap:18px;padding:0 26px;background:rgba(255,255,255,.96);
+.top{display:flex;align-items:center;gap:18px;padding:0 26px;max-width:100vw;background:rgba(255,255,255,.96);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:30;box-shadow:0 2px 14px rgba(29,62,140,.05)}
 .brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .brand .mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--cyan));
   display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
 .brand b{font-size:15px;letter-spacing:.2px}
-.nav{display:flex;gap:4px;flex:1;justify-content:center;overflow-x:auto;scrollbar-width:none}
+.nav{display:flex;gap:4px;flex:1;min-width:0;justify-content:center;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nav button{flex-shrink:0;border:0;background:transparent;color:var(--ink2);cursor:pointer;
   padding:9px 15px;border-radius:10px;font-size:13.5px;font-weight:600;white-space:nowrap;transition:.2s;font-family:inherit}
@@ -79,7 +79,7 @@ main{position:relative;overflow:hidden}
 .collab{position:relative;border:1px solid var(--line);border-radius:18px;
   background:linear-gradient(135deg,#F8FBFF 0%,#EDF4FF 55%,#F3FBF7 100%);
   padding:24px 26px 18px;box-shadow:var(--shadow);overflow:hidden}
-.collab-row{display:grid;grid-template-columns:1fr 108px 1.15fr 108px 1fr;align-items:center;gap:8px}
+.collab-row{display:grid;grid-template-columns:1fr 148px 1.12fr 148px 1fr;align-items:center;gap:8px}
 .cnode{position:relative;z-index:2;background:#fff;border:1px solid var(--line);border-radius:15px;
   padding:15px 16px;min-height:140px;box-shadow:0 8px 20px rgba(29,62,140,.09)}
 .cnode.mid{transform:translateY(-9px);border-color:rgba(47,91,232,.35);box-shadow:0 14px 32px rgba(47,91,232,.18)}
@@ -99,11 +99,22 @@ main{position:relative;overflow:hidden}
 .clink::after{content:'';position:absolute;right:0;top:50%;border-left:9px solid var(--blue-m);
   border-top:6px solid transparent;border-bottom:6px solid transparent;transform:translateY(-50%)}
 .clink.r::after{border-left-color:var(--cyan)}
+.clink.r .rev{border-right-color:var(--green)}
 .clink .rev{position:absolute;left:0;top:50%;border-right:9px solid var(--blue);
   border-top:6px solid transparent;border-bottom:6px solid transparent;transform:translateY(-50%)}
 .clink .lb{position:relative;z-index:3;background:#fff;border:1px solid var(--line);border-radius:999px;
   padding:5px 8px;font-size:10.8px;font-weight:700;color:var(--blue-d);white-space:nowrap;box-shadow:0 3px 10px rgba(29,62,140,.1)}
 .clink.r .lb{color:#0A6E42}
+/* 双向标签：上行=向右（下游），下行=向左（回溯） */
+.clink .lb2{position:relative;z-index:3;display:flex;flex-direction:column;gap:1px;background:#fff;
+  border:1px solid var(--line);border-radius:10px;padding:5px 8px;white-space:nowrap;
+  box-shadow:0 3px 10px rgba(29,62,140,.1);font-size:10.6px;font-weight:700;line-height:1.5}
+.clink .lb2 b{font-weight:700;color:var(--blue-d)}
+.clink .lb2 .bk{font-weight:600;color:var(--ink3)}
+.clink.r .lb2 b{color:#0A6E42}
+.clink .dot.bk{background:var(--violet);box-shadow:0 0 0 4px rgba(124,92,255,.14);animation:flowDotBack 2.9s linear infinite}
+.clink.r .dot.bk{background:var(--cyan);box-shadow:0 0 0 4px rgba(18,183,106,.14)}
+@keyframes flowDotBack{0%{left:calc(100% - 14px);opacity:0}12%{opacity:1}88%{opacity:1}100%{left:6px;opacity:0}}
 .clink .dot{position:absolute;z-index:2;top:50%;left:6px;width:8px;height:8px;border-radius:50%;
   transform:translateY(-50%);background:var(--blue);box-shadow:0 0 0 4px rgba(47,91,232,.15);
   animation:flowDot 2.4s linear infinite}
@@ -257,6 +268,8 @@ main{position:relative;overflow:hidden}
   .shots{grid-template-columns:repeat(3,minmax(0,1fr))!important}
   .shot-frame{height:150px}
   .clink .dot,.loopback .dot{display:none!important}
+  .collab-row{grid-template-columns:1fr 104px 1.06fr 104px 1fr!important}
+  .clink .lb2{font-size:9.2px;padding:3px 5px;line-height:1.45}
   .journey{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   .journey::before{display:none!important}
   .lightbox{display:none!important}
@@ -272,9 +285,10 @@ main{position:relative;overflow:hidden}
   .frow{grid-template-columns:1fr}.hub{grid-template-columns:1fr}.hub-arrow{transform:rotate(90deg)}
   .proj{grid-template-columns:1fr}
   .collab-row{grid-template-columns:1fr;gap:10px}
-  .clink{height:26px}
+  .clink{height:30px}
   .clink::before,.clink::after,.clink .rev,.clink .dot{display:none}
   .clink .lb{font-size:11px}
+  .clink .lb2{flex-direction:row;gap:8px;font-size:10.6px;padding:3px 9px}
   .loopback{margin:8px 0 0}
   .journey{grid-template-columns:repeat(2,minmax(0,1fr))}
   .journey::before{display:none}
@@ -372,16 +386,18 @@ const MODS = [
    <div class="cnode a"><div class="ci">${icoDoc}</div><h3>医院 / 医护</h3><div class="sub">医生、护士 · 专业判断</div>
     <p>查看患者情况，关注关键指标与异常；在关键节点给出专业判断和医疗干预。</p>
     <div class="tags"><span>查看患者情况</span><span>关注异常</span><span>专业判断</span></div></div>
-   <div class="clink l"><i class="rev"></i><i class="dot"></i><span class="lb">异常上报 ⇄ 专业判断</span></div>
+   <div class="clink l"><i class="rev"></i><i class="dot"></i><i class="dot bk"></i>
+    <span class="lb2"><b>专业判断 →</b><span class="bk">← 异常上报</span></span></div>
    <div class="cnode b mid"><div class="ci">${icoCase}</div><h3>个案</h3><div class="sub">个案管理师 · 日常枢纽</div>
     <p>承担高频管理工作：建档与计划、复查提醒、随访、患教、异常跟进与患者沟通。</p>
     <div class="tags"><span>建档与计划</span><span>日常跟进</span><span>复查提醒与随访</span><span>患教与沟通</span></div></div>
-   <div class="clink r"><i class="dot"></i><span class="lb">计划下发 · 提醒随访 →</span></div>
+   <div class="clink r"><i class="rev"></i><i class="dot"></i><i class="dot bk"></i>
+    <span class="lb2"><b>计划下发 · 提醒随访 →</b><span class="bk">← 执行反馈</span></span></div>
    <div class="cnode c"><div class="ci">${icoUser}</div><h3>患者 / 家属</h3><div class="sub">通过小程序参与</div>
     <p>清楚不同阶段要完成什么，离院后持续获得提醒、随访与专业支持，并主动反馈状态。</p>
     <div class="tags"><span>执行管理计划</span><span>完成复查随访</span><span>上传报告</span><span>反馈院外状态</span></div></div>
   </div>
-  <div class="loopback"><i class="dot"></i><span>← 执行反馈 · 报告上传 · 结果回写，形成闭环</span></div>
+  <div class="loopback"><i class="dot"></i><span>← 结果回写 · 计划更新，形成闭环</span></div>
   <div class="shared-core">三方共同围绕 <b>管理计划</b> · <b>任务</b> · <b>异常</b> · <b>反馈</b> 运转</div>
  </div>
  <div class="tint a"><b>协同的关键：</b>个案是连接患者执行与医护干预的日常枢纽；常规事务由工作台和计划驱动，医护时间集中在异常患者与关键判断上。</div>
